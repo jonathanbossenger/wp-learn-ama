@@ -1,0 +1,23 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "wp-learn-ama/wp-learn-ama-block",
+	"version": "1.0.0",
+	"title": "WP Learn AMA",
+	"category": "widgets",
+	"icon": "feedback",
+	"description": "WP Learn AMA block.",
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"instructions": {
+			"type": "string",
+			"default": "Please ask your question."
+		}
+	},
+	"textdomain": "wp-learn-ama",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}
