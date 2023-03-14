@@ -6,7 +6,7 @@
  * Author URI:      https://jonthanbossenger.com
  * Text Domain:     wp-learn-ama
  * Domain Path:     /languages
- * Version:         1.0.0
+ * Version:         1.1.0
  *
  * @package         WP_Learn_AMA
  */
@@ -14,15 +14,15 @@
 /**
  * Activation
  */
-register_activation_hook( __FILE__, 'wp_learn_guest_author_role' );
-function wp_learn_guest_author_role() {
+register_activation_hook( __FILE__, 'wp_learn_question_author_role' );
+function wp_learn_question_author_role() {
 	add_role(
-		'guest_author',
-		'Guest Author',
+		'question_author',
+		'Question Author',
 		array(
-			'read'         => true,  // true allows this capability
-			'edit_posts'   => true,
-			'delete_posts' => false, // Use false to explicitly deny
+			'read'                   => false,  // true allows this capability
+			'edit_question'          => true,
+			'edit_questions'         => true,
 		)
 	);
 }
@@ -66,6 +66,8 @@ function wp_learn_ama_plugin_init() {
 				'editor',
 				'custom-fields',
 			),
+            'capability_type' => 'question',
+            'map_meta_cap'    => false,
 		)
 	);
 
@@ -83,6 +85,24 @@ function wp_learn_ama_plugin_init() {
 			'object_subtype' => 'question',
 		)
 	);
+
+    /**
+     * Allow the administrator user role full access to questions
+     */
+    $capabilities = array(
+        'edit_question',
+        'read_question',
+        'delete_question',
+        'edit_others_questions',
+        'delete_questions',
+        'publish_questions',
+        'read_private_questions',
+        'edit_questions',
+    );
+	$role = get_role( 'administrator' );
+    foreach ( $capabilities as $capability ) {
+        $role->add_cap( $capability );
+    }
 }
 
 /**
@@ -117,5 +137,4 @@ function wp_learn_ama_enqueue_script() {
 		true
 	);
 	wp_enqueue_script( 'wp-learn-ama' );
-
 }
