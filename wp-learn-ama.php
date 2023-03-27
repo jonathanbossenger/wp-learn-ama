@@ -14,8 +14,8 @@
 /**
  * Activation
  */
-register_activation_hook( __FILE__, 'wp_learn_question_author_role' );
-function wp_learn_question_author_role() {
+register_activation_hook( __FILE__, 'wp_learn_add_question_role_capabilities' );
+function wp_learn_add_question_role_capabilities() {
 	add_role(
 		'question_author',
 		'Question Author',
@@ -25,6 +25,40 @@ function wp_learn_question_author_role() {
 			'edit_questions'         => true,
 		)
 	);
+	$capabilities = array(
+		'edit_question',
+		'read_question',
+		'delete_question',
+		'edit_others_questions',
+		'delete_questions',
+		'publish_questions',
+		'read_private_questions',
+		'edit_questions',
+	);
+	$role = get_role( 'administrator' );
+	foreach ( $capabilities as $capability ) {
+		$role->add_cap( $capability );
+	}
+
+}
+
+register_deactivation_hook( __FILE__, 'wp_learn_remove_question_role_capabilities' );
+function wp_learn_remove_question_role_capabilities() {
+	remove_role( 'question_author' );
+	$capabilities = array(
+		'edit_question',
+		'read_question',
+		'delete_question',
+		'edit_others_questions',
+		'delete_questions',
+		'publish_questions',
+		'read_private_questions',
+		'edit_questions',
+	);
+	$role = get_role( 'administrator' );
+	foreach ( $capabilities as $capability ) {
+		$role->remove_cap( $capability );
+	}
 }
 
 /**
@@ -85,24 +119,6 @@ function wp_learn_ama_plugin_init() {
 			'object_subtype' => 'question',
 		)
 	);
-
-    /**
-     * Allow the administrator user role full access to questions
-     */
-    $capabilities = array(
-        'edit_question',
-        'read_question',
-        'delete_question',
-        'edit_others_questions',
-        'delete_questions',
-        'publish_questions',
-        'read_private_questions',
-        'edit_questions',
-    );
-	$role = get_role( 'administrator' );
-    foreach ( $capabilities as $capability ) {
-        $role->add_cap( $capability );
-    }
 }
 
 /**
